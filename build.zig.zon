@@ -1,5 +1,5 @@
 .{
-    .name = "zclay",
+    .name = .zclay,
     .version = "0.0.0",
     .dependencies = .{
         .clay = .{
@@ -15,4 +15,5 @@
         "LICENSE",
         "README.md",
     },
+    .fingerprint = 0x4821f6a47c7aeac4,
 }

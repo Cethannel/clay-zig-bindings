@@ -65,13 +65,13 @@ fn createLayout(profile_picture: *const rl.Texture2D) cl.ClayArray(cl.RenderComm
     return cl.endLayout();
 }
 
-fn loadFont(file_data: ?[]const u8, font_id: u16, font_size: i32) void {
-    renderer.raylib_fonts[font_id] = rl.loadFontFromMemory(".ttf", file_data, font_size * 2, null);
+fn loadFont(file_data: ?[]const u8, font_id: u16, font_size: i32) !void {
+    renderer.raylib_fonts[font_id] = try rl.loadFontFromMemory(".ttf", file_data, font_size * 2, null);
     rl.setTextureFilter(renderer.raylib_fonts[font_id].?.texture, .bilinear);
 }
 
-fn loadImage(comptime path: [:0]const u8) rl.Texture2D {
-    const texture = rl.loadTextureFromImage(rl.loadImageFromMemory(@ptrCast(std.fs.path.extension(path)), @embedFile(path)));
+fn loadImage(comptime path: [:0]const u8) !rl.Texture2D {
+    const texture = try rl.loadTextureFromImage(try rl.loadImageFromMemory(@ptrCast(std.fs.path.extension(path)), @embedFile(path)));
     rl.setTextureFilter(texture, .bilinear);
     return texture;
 }
@@ -97,8 +97,8 @@ pub fn main() anyerror!void {
     rl.setTargetFPS(120);
 
     // load assets
-    loadFont(@embedFile("./resources/Roboto-Regular.ttf"), 0, 24);
-    const profile_picture = loadImage("./resources/profile-picture.png");
+    try loadFont(@embedFile("./resources/Roboto-Regular.ttf"), 0, 24);
+    const profile_picture = try loadImage("./resources/profile-picture.png");
 
     var debug_mode_enabled = false;
     while (!rl.windowShouldClose()) {
